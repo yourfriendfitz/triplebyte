@@ -1,7 +1,7 @@
 import React from "react";
 import * as Bootstrap from "reactstrap";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const GridContainer = styled(Bootstrap.Container)`
   display: grid;
@@ -15,7 +15,6 @@ const Card = styled(Bootstrap.Container)`
   text-align: center;
   grid-template-rows: 30px auto;
   height: min-content;
-  margin: auto;
   width: 100%;
 `;
 
@@ -27,103 +26,90 @@ const CardTitle = styled(Bootstrap.Container)`
   color: white;
 `;
 
-const PurpleCardTitle = styled(CardTitle)`
+const ColoredCardTitle = styled(CardTitle)`
   background-color: #8e6e95;
-`;
-
-const TealCardTitle = styled(CardTitle)`
-  background-color: #39a59c;
-`;
-
-const DarkCardTitle = styled(CardTitle)`
-  background-color: #344759;
-`;
-
-const OrangeCardTitle = styled(CardTitle)`
-  background-color: #e8741e;
+  background-color: ${props => props.color};
 `;
 
 const CardRow = styled(Bootstrap.Container)`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 48px;
+  border: medium 1px;
 `;
 
 const Button = styled(Bootstrap.Button)`
   width: 100%;
 `;
 
-const CardControl = styled.span`
+const LeftButton = styled(Button)`
+  display: ${props => (props.target === "purple" ? "none" : "block")};
+`;
+
+const RightButton = styled(Button)`
+  display: ${props => (props.target === "orange" ? "none" : "block")};
+`;
+
+const CardRowItem = styled.span`
   margin: auto;
+  width: 100%;
 `;
 
 function App() {
+  const colors = [
+    { name: "purple", value: "#8e6e95" },
+    { name: "teal", value: "#39a59c" },
+    { name: "dark", value: "#344759" },
+    { name: "orange", value: "#e8741e" }
+  ];
   const persistedCards = localStorage.getItem("cards");
-  const targets = ["purple", "teal", "dark", "orange"];
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([persistedCards]);
   const addCard = target => {
     const body = window.prompt();
     setCards([...cards, { target, body }]);
-    localStorage.setItem("cards", cards);
+    localStorage.setItem("cards", JSON.stringify(cards));
   };
   const changeCard = (oldCard, newTarget) => {
-    const newCards = cards.filter(card => card != oldCard);
+    const newCards = cards.filter(card => card !== oldCard);
     setCards([...newCards, { body: oldCard.body, target: newTarget }]);
   };
-  const filterCards = (array, target) => {
-    const targetIndex = targets.indexOf(target);
-    const cards = array.filter(obj => obj.target === target);
-    return cards.map(card => {
+  const filterCards = (array, color) => {
+    const targetIndex = colors.indexOf(color);
+    const cards = array.filter(obj => obj.target === color.name);
+    return cards.map((card, i) => {
       return (
-        <CardRow>
-          {card.target === "purple" ? (
-            ""
-          ) : (
-            <CardControl>
-              <Button
-                onClick={() => changeCard(card, targets[targetIndex - 1])}
-              >
-                {"<"}
-              </Button>
-            </CardControl>
-          )}
-          {card.body}
-          {card.target === "orange" ? (
-            ""
-          ) : (
-            <CardControl>
-              <Button
-                onClick={() => changeCard(card, targets[targetIndex + 1])}
-              >
-                {">"}
-              </Button>
-            </CardControl>
-          )}
+        <CardRow key={i}>
+          <CardRowItem>
+            <LeftButton
+              target={card.target}
+              onClick={() => changeCard(card, colors[targetIndex - 1].name)}
+            >
+              {"<"}
+            </LeftButton>
+          </CardRowItem>
+          <CardRowItem>{card.body}</CardRowItem>
+          <CardRowItem>
+            <RightButton
+              target={card.target}
+              onClick={() => changeCard(card, colors[targetIndex + 1].name)}
+            >
+              {">"}
+            </RightButton>
+          </CardRowItem>
         </CardRow>
       );
     });
   };
   return (
     <GridContainer>
-      <Card>
-        <PurpleCardTitle>Column1</PurpleCardTitle>
-        {filterCards(cards, "purple")}
-        <Button onClick={() => addCard("purple")}>Add Card</Button>
-      </Card>
-      <Card>
-        <TealCardTitle>Column1</TealCardTitle>
-        {filterCards(cards, "teal")}
-        <Button onClick={() => addCard("teal")}>Add Card</Button>
-      </Card>
-      <Card>
-        <DarkCardTitle>Column1</DarkCardTitle>
-        {filterCards(cards, "dark")}
-        <Button onClick={() => addCard("dark")}>Add Card</Button>
-      </Card>
-      <Card>
-        <OrangeCardTitle>Column1</OrangeCardTitle>
-        {filterCards(cards, "orange")}
-        <Button onClick={() => addCard("orange")}>Add Card</Button>
-      </Card>
+      {colors.map((color, i) => (
+        <Card key={i}>
+          <ColoredCardTitle color={color.value}>Column1</ColoredCardTitle>
+          {filterCards(cards, color)}
+          <Button onClick={() => addCard(color.name)}>Add Card</Button>
+        </Card>
+      ))}
     </GridContainer>
   );
 }
