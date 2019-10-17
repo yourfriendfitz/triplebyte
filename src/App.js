@@ -63,12 +63,10 @@ function App() {
     { name: "dark", value: "#344759" },
     { name: "orange", value: "#e8741e" }
   ];
-  const persistedCards = localStorage.getItem("cards");
-  const [cards, setCards] = useState([persistedCards]);
+  const [cards, setCards] = useState([]);
   const addCard = target => {
     const body = window.prompt();
     setCards([...cards, { target, body }]);
-    localStorage.setItem("cards", JSON.stringify(cards));
   };
   const changeCard = (oldCard, newTarget) => {
     const newCards = cards.filter(card => card !== oldCard);
