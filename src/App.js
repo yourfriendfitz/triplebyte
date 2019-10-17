@@ -105,7 +105,7 @@ function App() {
     <GridContainer>
       {colors.map((color, i) => (
         <Card key={i}>
-          <ColoredCardTitle color={color.value}>Column1</ColoredCardTitle>
+          <ColoredCardTitle color={color.value}>{color.name} Column</ColoredCardTitle>
           {filterCards(cards, color)}
           <Button onClick={() => addCard(color.name)}>Add Card</Button>
         </Card>
