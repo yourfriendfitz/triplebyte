@@ -19,3 +19,5 @@ Input View: ![Base View](inputView.png)
 Cards View: ![Base View](columnView.png)
 
 Stacked Cards View: ![Base View](doubledView.png)
+
+Please help improve this project by opening a pull request with a proposed change!
