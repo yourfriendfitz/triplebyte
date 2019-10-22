@@ -1,16 +1,18 @@
 This react app was created during a triplebyte interview
 
-The task was required an application with four columns
+The interviewer allowed 1 hour to complete this app with the following requirements:
 
-The user can add a card using the add card button
+  Four columns with specific spacing
 
-When add card is cliked the user will be prompted for input using:
+  The user can add a card using the add card button
 
-```
-window.prompt()
-```
+  When add card is cliked the user will be prompted for input using:
 
-Further requirements provided are left and right controls to move cards from column to column.
+  ```
+  window.prompt()
+  ```
+
+  Left and right controls to move cards from column to column.
 
 Base View: ![Base View](baseView.png)
 
