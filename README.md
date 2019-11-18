@@ -6,7 +6,7 @@ The interviewer allowed 1 hour to complete this app with the following requireme
 
   The user can add a card using the add card button
 
-  When add card is cliked the user will be prompted for input using:
+  When add card is clicked the user will be prompted for input using:
 
   ```
   window.prompt()
